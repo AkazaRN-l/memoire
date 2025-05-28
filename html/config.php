@@ -1,5 +1,7 @@
 <?php
 
+//Mon commentaire
+
 $serveur = "127.0.0.1";
 $utilisateur = "root"; 
 $motdepasse = "R02102002";     
