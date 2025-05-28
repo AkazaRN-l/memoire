@@ -1,0 +1,171 @@
+/* === Background avec image de pylône === */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('../photo/global-connections.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #f3f4f6;
+}
+
+/* === Conteneur avec effet blur === */
+.dashboard-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+  background: rgba(17, 24, 39, 0.65);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* === Animation à l'entrée === */
+.dashboard-main {
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* === Bouton retour === */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #60a5fa;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.back-button:hover {
+  color: #3b82f6;
+}
+
+/* === Titre principal === */
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 10px;
+}
+
+/* === Titre de section === */
+.courses-stream h2 {
+  font-size: 1.8rem;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  color: #93c5fd;
+}
+
+/* === Timeline des cours === */
+.courses-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* === Bloc de chaque cours === */
+.course-item {
+  background-color: rgba(31, 41, 55, 0.85);
+  border-left: 4px solid #3b82f6;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.course-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+/* === Titre du cours === */
+.course-title {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #f9fafb;
+}
+
+/* === Métadonnées du cours === */
+.course-meta {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* === Description du cours === */
+.course-desc {
+  font-size: 1rem;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+/* === Fichier joint === */
+.course-file {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #374151;
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+.file-name {
+  font-weight: 500;
+  color: #e5e7eb;
+}
+
+/* === Lien de téléchargement === */
+.download-link {
+  background-color: #2563eb;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.download-link:hover {
+  background-color: #1d4ed8;
+}
+
+/* === Message si aucun cours === */
+.no-courses-msg {
+  font-style: italic;
+  color: #9ca3af;
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* === Animation fadeIn === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #2563eb;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: none;
+  margin-bottom: 25px;
+}
+
+.back-button:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  
+}

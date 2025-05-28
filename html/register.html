@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription Étudiant</title>
+    <link rel="stylesheet" href="../css/register.css">
+    <script defer src="../js/register.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="form-box">
+        <h2>Créer un compte étudiant</h2>
+        <p>Accédez à notre plateforme de téléenseignement</p>
+        <form action="inscription.php" method="POST" enctype="multipart/form-data">
+
+            <div class="input-group">
+                <label>Numéro d'inscription</label>
+                <input type="text" name="numero_inscription" required>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Nom</label>
+                    <input type="text" name="nom" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Prénom</label>
+                    <input type="text" name="prenom" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+
+            <div class="input-group">
+                <label>Numéro de téléphone</label>
+                <input type="tel" name="telephone" pattern="[0-9]{10}" title="10 chiffres sans espaces" required>
+            </div>
+
+            <div class="input-group">
+                <label>Mot de passe</label>
+                <input type="password" name="mot_de_passe" id="mot_de_passe" required>
+                <span id="length-error" style="color: red; font-size: 13px;"></span>
+            </div>
+            
+
+
+            
+            <div class="input-group">
+                <label>Confirmer mot de passe</label>
+                <input type="password" name="confirmer_mot_de_passe" id="confirmer_mot_de_passe" required>
+                <span id="password-error"></span>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Date de naissance</label>
+                    <input type="date" name="date_naissance" id="date_naissance" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Âge</label>
+                    <input type="text" name="age" id="age" readonly>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Sexe</label>
+                <select name="sexe" required>
+                    <option value="">Sélectionner</option>
+                    <option value="homme">Homme</option>
+                    <option value="femme">Femme</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Niveau</label>
+                <select name="niveau" required>
+                    <option value="">Sélectionner</option>
+                    <option value="Licence I">Licence I</option>
+                    <option value="Licence II">Licence II</option>
+                    <option value="Licence III">Licence III</option>
+                    <option value="Master I">Master I</option>
+                    <option value="Master II">Master II</option>
+                </select>
+            </div>
+
+            <div class="input-group file-upload">
+                <label for="photo">Photo de profil</label>
+                <input type="file" name="photo" id="photo" accept="image/*" required>
+                <div id="photo-preview"></div>
+            </div>
+
+            <button type="submit" class="btn">Créer un compte</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

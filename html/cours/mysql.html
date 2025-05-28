@@ -1,0 +1,9 @@
+CREATE TABLE cours (
+    id INT AUTO_INCREMENT PRIMARY KEY,  -- Identifiant unique pour chaque cours
+    titre VARCHAR(255) NOT NULL,        -- Titre du cours
+    fichier_nom VARCHAR(255),           -- Nom du fichier (ex : "cours.pdf")
+    chemin_fichier VARCHAR(255),        -- Chemin du fichier dans le dossier uploads
+    date_envoi TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Date d'envoi du fichier, prend la date actuelle par défaut
+    enseignant_id INT,                  -- ID de l'enseignant (peut être une clé étrangère)
+    FOREIGN KEY (enseignant_id) REFERENCES enseignants(id)  -- Relation avec la table des enseignants (si tu as cette table)
+);

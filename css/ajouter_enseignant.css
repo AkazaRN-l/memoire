@@ -1,0 +1,119 @@
+/* Style global */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    text-align: center;
+}
+
+/* Conteneur principal */
+.form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    width: 450px;
+    margin: auto;
+    margin-top: 40px;
+    color: #2c3e50;
+}
+
+/* Champs */
+.form-container label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+/* Bouton */
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    background: #1e3c72;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+.form-container button:hover {
+    background: #2a5298;
+}
+
+/* Message de succès */
+.success-msg {
+    background: #2ecc71;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Conteneur de liste */
+.list-container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    margin: 40px auto;
+    color: #2c3e50;
+}
+
+/* Tableau */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background: #2980b9;
+    color: white;
+}
+
+/* Bouton supprimer */
+.btn-supprimer {
+    background: #c0392b;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.btn-supprimer:hover {
+    background: #e74c3c;
+}
+
+/* Bouton retour */
+.btn-retour {
+    display: block;
+    margin-top: 15px;
+    padding: 10px;
+    background: #34495e;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}

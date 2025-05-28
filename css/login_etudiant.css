@@ -1,0 +1,331 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-image: url("../photo/inverse.jpg");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    max-width: 1100px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Section Image */
+.image-section {
+    flex: 1;
+    text-align: center;
+}
+
+.image-section img {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 10px;
+}
+
+/* Section Formulaire */
+.login-box {
+    flex: 1;
+    padding: 30px;
+    color: white;
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Champs de saisie */
+.input-group {
+    position: relative;
+    margin: 15px 0;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    font-size: 16px;
+    color: white;
+    outline: none;
+}
+
+.input-group label {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: white;
+    opacity: 0.7;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+/* Effet qui fait monter le label */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: 5px;
+    font-size: 12px;
+    color: #ffd700;
+    opacity: 1;
+}
+
+/* Bouton */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #ffd700;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #ffbb00;
+}
+
+/* Lien d'inscription */
+.register-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+    .container {
+        flex-direction: column;
+        width: 90%;
+    }
+    
+    .image-section {
+        margin-bottom: 20px;
+    }
+}
+
+.register-btn {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.register-btn:hover {
+    background: #f0f0f0;
+}
+
+.or-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 15px 0;
+}
+
+.or-divider::before,
+.or-divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+    margin: 0 10px;
+}
+
+.or-divider span {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Positionner l'icône dans la case */
+.password-group {
+    position: relative;
+}
+
+
+/* Conteneur du champ de sélection */
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    appearance: none; /* Cache l'apparence par défaut */
+    cursor: pointer;
+}
+
+/* Effet au survol */
+.input-group select:hover {
+    border-color: #3498db;
+}
+
+/* Effet lorsqu'on clique */
+.input-group select:focus {
+    border-color: #2980b9;
+    box-shadow: 0px 0px 5px rgba(41, 128, 185, 0.5);
+    outline: none;
+}
+
+
+.forgot-password {
+    font-size: 0.8rem;
+    color: #a8a6a6;
+    text-decoration: none;
+    position: relative;
+    top: 320px;
+}
+
+.forgot-password:hover {
+    color: var(--primary-color);
+}
+
+
+/* Ajustement pour le groupe mot de passe */
+.password-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+
+
+
+
+
+/* Conteneur principal */
+.show-password-container {
+    display: flex;
+    align-items: center;
+    margin: 12px 0 20px;
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    user-select: none;
+    bottom: 20px;
+    left: 130px;
+}
+
+/* Cache la checkbox par défaut */
+.show-password-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Case à cocher personnalisée */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+/* Au survol */
+.show-password-container:hover input ~ .checkmark {
+    background-color: #f1f1f1;
+}
+
+/* Quand cochée */
+.show-password-container input:checked ~ .checkmark {
+    background-color: var(--primary-color);
+}
+
+/* Marque de validation (cachée par défaut) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Affiche la marque quand cochée */
+.show-password-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style de la marque */
+.show-password-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Texte du label */
+.show-password-container label {
+    margin-left: 8px;
+    color: var(--dark-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Effet au survol du texte */
+.show-password-container:hover label {
+    color: var(--primary-color);
+}
+
+/* Version pour thème sombre */
+@media (prefers-color-scheme: dark) {
+    .checkmark {
+        background-color: #2d2d2d;
+        border-color: var(--accent-color);
+    }
+    
+    .show-password-container label {
+        color: #e0e0e0;
+    }
+}

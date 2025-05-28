@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation des inscriptions - Admin</title>
+    <link rel="stylesheet" href="../css/admin_validation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>Validation des inscriptions</h1>
+            <p>Interface administrateur</p>
+        </header>
+
+        <main class="admin-main">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Niveau</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="uploads/photo1.jpg" alt="Photo de profil" class="user-photo"></td>
+                        <td>Dupont</td>
+                        <td>Jean</td>
+                        <td>jean.dupont@example.com</td>
+                        <td>Licence II</td>
+                        <td class="actions">
+                            <button class="btn btn-validate"><i class="fas fa-check"></i> Valider</button>
+                            <button class="btn btn-reject"><i class="fas fa-times"></i> Refuser</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img src="uploads/photo2.jpg" alt="Photo de profil" class="user-photo"></td>
+                        <td>Martin</td>
+                        <td>Sophie</td>
+                        <td>sophie.martin@example.com</td>
+                        <td>Master I</td>
+                        <td class="actions">
+                            <button class="btn btn-validate"><i class="fas fa-check"></i> Valider</button>
+                            <button class="btn btn-reject"><i class="fas fa-times"></i> Refuser</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+
+        <footer class="admin-footer">
+            <p>&copy; 2025 Télécommunications. Tous droits réservés.</p>
+        </footer>
+    </div>
+</body>
+</html>

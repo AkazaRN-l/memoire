@@ -1,0 +1,241 @@
+<?php
+session_start();
+
+// Inclure la configuration avant tout code
+require __DIR__ . 'database.php';
+
+// Vérification d'authentification
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'chef_mention') {
+    header('Location: login.php');
+    exit();
+}
+
+// [...] (le reste de votre code existant)
+// Initialisation de $pdo si non défini (sécurité)
+if (!isset($pdo)) {
+    die("Erreur de connexion à la base de données");
+}
+
+// Traitement des actions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'] ?? 0;
+    
+    if (isset($_POST['valider'])) {
+        try {
+            $stmt = $pdo->prepare("UPDATE etudiants SET statut = 'validé', date_validation = NOW() WHERE id = ?");
+            $stmt->execute([$id]);
+            $_SESSION['message'] = "Étudiant validé avec succès";
+        } catch (PDOException $e) {
+            $_SESSION['error'] = "Erreur lors de la validation: " . $e->getMessage();
+        }
+    } 
+    elseif (isset($_POST['supprimer'])) {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM etudiants WHERE id = ?");
+            $stmt->execute([$id]);
+            $_SESSION['message'] = "Inscription refusée";
+        } catch (PDOException $e) {
+            $_SESSION['error'] = "Erreur lors du refus: " . $e->getMessage();
+        }
+    }
+    
+    header("Location: dashboard_chef.php");
+    exit();
+}
+
+// Récupération des étudiants
+try {
+    // Étudiants en attente
+    $stmt = $pdo->prepare("SELECT * FROM etudiants WHERE statut = 'en attente' ORDER BY date_inscription DESC");
+    $stmt->execute();
+    $etudiants_attente = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Étudiants validés
+    $stmt = $pdo->prepare("SELECT * FROM etudiants WHERE statut = 'validé' ORDER BY nom, prenom");
+    $stmt->execute();
+    $etudiants_valides = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Erreur de base de données: " . $e->getMessage());
+}
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Chef de Mention</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/dashboard_chef.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Chef de Mention</h2>
+            <div class="user-info">
+                <div class="avatar">
+                    <?= strtoupper(substr($_SESSION['prenom'] ?? 'C', 0, 1) . substr($_SESSION['nom'] ?? 'M', 0, 1)) ?>
+                </div>
+                <p><?= htmlspecialchars($_SESSION['prenom'] ?? 'Chef') ?></p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="dashboard_chef.php" class="active"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a></li>
+                <li><a href="informations_envoyees.php"><i class="fas fa-envelope"></i> Informations</a></li>
+                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <header>
+            <h1><i class="fas fa-users"></i> Gestion des inscriptions</h1>
+            <?php if (isset($_SESSION['message'])): ?>
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> <?= $_SESSION['message'] ?>
+                </div>
+                <?php unset($_SESSION['message']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-error">
+                    <i class="fas fa-exclamation-circle"></i> <?= $_SESSION['error'] ?>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+        </header>
+
+        <div class="content">
+            <!-- Étudiants en attente -->
+            <section class="student-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-clock"></i> Demandes en attente</h2>
+                    <span class="badge"><?= count($etudiants_attente) ?></span>
+                </div>
+                
+                <?php if (empty($etudiants_attente)): ?>
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Aucune demande en attente</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Niveau</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($etudiants_attente as $etudiant): ?>
+                                <tr>
+                                    <td><img src="<?= htmlspecialchars($etudiant['photo']) ?>" class="student-photo" alt="Photo étudiant"></td>
+                                    <td><?= htmlspecialchars($etudiant['nom']) ?></td>
+                                    <td><?= htmlspecialchars($etudiant['prenom']) ?></td>
+                                    <td><?= htmlspecialchars($etudiant['email']) ?></td>
+                                    <td><?= htmlspecialchars($etudiant['niveau']) ?></td>
+                                    <td><?= date('d/m/Y', strtotime($etudiant['date_inscription'])) ?></td>
+                                    <td class="actions">
+                                        <form method="POST" class="inline-form">
+                                            <input type="hidden" name="id" value="<?= $etudiant['id'] ?>">
+                                            <button type="submit" name="valider" class="btn btn-validate">
+                                                <i class="fas fa-check"></i> Valider
+                                            </button>
+                                        </form>
+                                        <form method="POST" class="inline-form">
+                                            <input type="hidden" name="id" value="<?= $etudiant['id'] ?>">
+                                            <button type="submit" name="supprimer" class="btn btn-reject">
+                                                <i class="fas fa-times"></i> Refuser
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </section>
+
+            <!-- Étudiants validés -->
+            <section class="student-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-check"></i> Étudiants validés</h2>
+                    <span class="badge"><?= count($etudiants_valides) ?></span>
+                </div>
+                
+                <?php if (empty($etudiants_valides)): ?>
+                    <div class="empty-state">
+                        <i class="fas fa-user-slash"></i>
+                        <p>Aucun étudiant validé</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Niveau</th>
+                                    <th>Date validation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($etudiants_valides as $etudiant): ?>
+                                <tr>
+                                    <td><img src="<?= htmlspecialchars($etudiant['photo']) ?>" class="student-photo" alt="Photo étudiant"></td>
+                                    <td><?= htmlspecialchars($etudiant['nom']) ?></td>
+                                    <td><?= htmlspecialchars($etudiant['prenom']) ?></td>
+                                    <td><?= htmlspecialchars($etudiant['email']) ?></td>
+                                    <td><?= htmlspecialchars($etudiant['niveau']) ?></td>
+                                    <td><?= date('d/m/Y', strtotime($etudiant['date_validation'] ?? $etudiant['date_inscription'])) ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script>
+// Confirmation avant suppression
+document.addEventListener('DOMContentLoaded', function() {
+    const rejectButtons = document.querySelectorAll('.btn-reject');
+    rejectButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!confirm('Êtes-vous sûr de vouloir refuser cette inscription ?')) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // Menu mobile
+    const menuToggle = document.createElement('div');
+    menuToggle.className = 'menu-toggle';
+    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    document.body.appendChild(menuToggle);
+    
+    menuToggle.addEventListener('click', function() {
+        document.querySelector('.sidebar').classList.toggle('active');
+        document.querySelector('.dashboard-main').classList.toggle('menu-open');
+    });
+});
+</script>
+
+</body>
+</html>

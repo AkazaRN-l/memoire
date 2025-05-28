@@ -1,0 +1,45 @@
+/* Styles pour la liste des cours */
+.course-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.course-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.course-info h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #2c3e50;
+}
+
+.course-info p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 1em;
+}
+
+.course-card button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.course-card button:hover {
+    background-color: #2980b9;
+}
+
+

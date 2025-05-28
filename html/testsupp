@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Visioconférence Jitsi</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #meet {
+            width: 90%;
+            height: 90vh;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+<?php
+    // Nom de la salle (à personnaliser)
+    $roomName = "MonSuperMeetRoom_" . uniqid();
+?>
+
+<iframe
+    id="meet"
+    src="https://meet.jit.si/<?php echo $roomName; ?>#config.startWithAudioMuted=true&interfaceConfig.DISABLE_JOIN_LEAVE_NOTIFICATIONS=true"
+    allow="camera; microphone; fullscreen; display-capture"
+    allowfullscreen>
+</iframe>
+
+</body>
+</html>

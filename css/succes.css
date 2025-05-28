@@ -1,0 +1,88 @@
+/* Styles généraux */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+    color: white;
+    text-align: center;
+}
+
+/* Conteneur principal */
+.success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Boîte de succès */
+.success-box {
+    background: white;
+    padding: 40px;
+    width: 420px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #333;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Icône */
+.success-box i {
+    font-size: 60px;
+    color: #1abc9c;
+    margin-bottom: 10px;
+}
+
+/* Titre */
+.success-box h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Texte */
+.success-box p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Bouton */
+.btn {
+    display: inline-block;
+    background: #1abc9c;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.3s ease;
+}
+
+.btn:hover {
+    background: #16a085;
+}
+
+/* Message de redirection */
+.redirect-msg {
+    font-size: 14px;
+    color: #888;
+    margin-top: 15px;
+}

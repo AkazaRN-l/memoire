@@ -1,0 +1,178 @@
+<?php
+session_start();
+include 'config.php';
+
+// Vérifier si l'utilisateur est bien le chef de mention
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'chef_mention') {
+    die("❌ Accès refusé.");
+}
+
+// Déterminer le niveau sélectionné (par défaut Licence I)
+$niveau_actuel = isset($_GET['niveau']) ? $_GET['niveau'] : 'Licence I';
+
+// Récupérer les étudiants validés pour ce niveau
+$sql_valides = "SELECT * FROM etudiants WHERE niveau = ? AND statut = 'validé'";
+$stmt = $conn->prepare($sql_valides);
+$stmt->bind_param("s", $niveau_actuel);
+$stmt->execute();
+$result_valides = $stmt->get_result();
+
+// Récupérer les enseignants
+$sql_enseignants = "SELECT * FROM enseignants";
+$result_enseignants = $conn->query($sql_enseignants);
+
+// Récupérer les cours
+$sql_cours = "SELECT * FROM cours WHERE niveau = ?";
+$stmt = $conn->prepare($sql_cours);
+$stmt->bind_param("s", $niveau_actuel);
+$stmt->execute();
+$result_cours = $stmt->get_result();
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Chef de Mention</title>
+    <link rel="stylesheet" href="../css/dashboard_chef.css">
+    <script>
+        function toggleListeCours() {
+            var section = document.getElementById("listeCours");
+            section.style.display = (section.style.display === "none") ? "block" : "none";
+        }
+    </script>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <h2>Chef de Mention</h2>
+        <nav>
+            <ul>
+                <li><a href="?niveau=Licence I">Licence I</a></li>
+                <li><a href="?niveau=Licence II">Licence II</a></li>
+                <li><a href="?niveau=Licence III">Licence III</a></li>
+                <li><a href="?niveau=Master I">Master I</a></li>
+                <li><a href="?niveau=Master II">Master II</a></li>
+                <li><a href="ajouter_enseignant.php">👨‍🏫 Gérer Enseignants</a></li>
+                <li><a href="envoyer_information.php">📢 Envoyer Information</a></li>
+                <li><a href="logout.php">🚪 Déconnexion</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <header>
+            <h1>👨‍🏫 Gestion - <?= htmlspecialchars($niveau_actuel) ?></h1>
+        </header>
+
+        <!-- Liste des étudiants validés (AFFICHÉ EN PREMIER) -->
+        <section class="student-list">
+            <h2>✔ Étudiants validés</h2>
+            <table>
+                <tr>
+                    <th>Photo</th>
+                    <th>N° Inscription</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Date de Naissance</th>
+                    <th>Âge</th>
+                    <th>Sexe</th>
+                    <th>Actions</th>
+                </tr>
+                <?php while ($row = $result_valides->fetch_assoc()) { ?>
+                <tr>
+                    <td><img src="<?= htmlspecialchars($row['photo']) ?>" class="photo-profil"></td>
+                    <td><?= htmlspecialchars($row['numero_inscription']) ?></td>
+                    <td><?= htmlspecialchars($row['nom'] . ' ' . $row['prenom']) ?></td>
+                    <td><?= htmlspecialchars($row['email']) ?></td>
+                    <td><?= htmlspecialchars($row['date_naissance']) ?></td>
+                    <td><?= htmlspecialchars($row['age']) ?></td>
+                    <td><?= htmlspecialchars($row['sexe']) ?></td>
+                    <td>
+                        <a href="supprimer_etudiant.php?id=<?= $row['id'] ?>" class="btn-supprimer">❌ Supprimer</a>
+                    </td>
+                </tr>
+                <?php } ?>
+            </table>
+        </section>
+
+        <!-- Liste des cours (avec affichage déroulant) -->
+        <section class="course-list">
+            <h2 onclick="toggleListeCours()" style="cursor: pointer;">📚 Liste des Cours (Cliquer pour afficher)</h2>
+            <div id="listeCours" style="display: none;">
+                <table>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Fichier</th>
+                        <th>Date d'Ajout</th>
+                    </tr>
+                    <?php while ($row = $result_cours->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['titre']) ?></td>
+                        <td><?= htmlspecialchars($row['description']) ?></td>
+                        <td><a href="../uploads/<?= htmlspecialchars($row['fichier']) ?>" target="_blank">📂 Voir</a></td>
+                        <td><?= htmlspecialchars($row['date_ajout']) ?></td>
+                    </tr>
+                    <?php } ?>
+                </table>
+            </div>
+        </section>
+
+        <!-- Liste des enseignants (AFFICHÉ APRÈS) -->
+        <section class="teacher-list">
+            <h2>👨‍🏫 Liste des Enseignants</h2>
+            <table>
+                <tr>
+                    <th>Numéro Matricule</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Matière</th>
+                    <th>Actions</th>
+                </tr>
+                <?php while ($row = $result_enseignants->fetch_assoc()) { ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['numero_matricule']) ?></td>
+                    <td><?= htmlspecialchars($row['nom'] . ' ' . $row['prenom']) ?></td>
+                    <td><?= htmlspecialchars($row['email']) ?></td>
+                    <td><?= htmlspecialchars($row['matiere']) ?></td>
+                    <td>
+                        <a href="supprimer_enseignant.php?id=<?= $row['id'] ?>" class="btn-supprimer">❌ Supprimer</a>
+                    </td>
+                </tr>
+                <?php } ?>
+            </table>
+        </section>
+    </main>
+</div>
+
+</body>
+</html>
+
+<?php $conn->close(); ?>
+
+
+
+
+
+
+if (isset($_GET['niveau'])) {
+    $niveau = $_GET['niveau'];
+} else {
+    $niveau = ''; // Valeur par défaut
+}
+
+$sql = "SELECT * FROM etudiants WHERE statut = 'validé'";
+if (!empty($niveau)) {
+    $sql .= " AND niveau = :niveau";
+}
+
+$stmt = $conn->prepare($sql);
+
+if (!empty($niveau)) {
+    $stmt->bindValue(':niveau', $niveau, PDO::PARAM_STR);
+}
+
+$stmt->execute();
+$etudiants_valides = $stmt->fetchAll(PDO::FETCH_ASSOC);
