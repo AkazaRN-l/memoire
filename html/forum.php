@@ -84,43 +84,87 @@ $messages = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum - <?= htmlspecialchars($matiere_nom) ?></title>
+    <link rel="stylesheet" href="../css/forum.css">
 </head>
 <body>
-    <h1>Forum : <?= htmlspecialchars($matiere_nom) ?></h1>
-    <p>Connecté : <?= htmlspecialchars($user_prenom . ' ' . $user_nom) ?> (<?= htmlspecialchars($role) ?>)</p>
-    <a href="<?= $role === 'etudiant' ? 'dashboard_etudiant.php' : 'dashboard_prof.php' ?>">Retour au tableau de bord</a>
-
-    <form method="POST" enctype="multipart/form-data">
-        <textarea name="message" placeholder="Votre message" required></textarea><br>
-        <input type="file" name="fichier"><br>
-        <button type="submit">Envoyer</button>
-    </form>
-
-    <h2>Messages</h2>
-    <?php if (!empty($messages)): ?>
-        <?php foreach ($messages as $msg): ?>
-            <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
-                <strong><?= htmlspecialchars($msg['prenom'] . ' ' . $msg['nom']) ?> (<?= $msg['type_auteur'] ?>)</strong><br>
-                <small><?= $msg['date_message'] ?></small><br>
-                <p><?= nl2br(htmlspecialchars($msg['message'])) ?></p>
-                <?php if (!empty($msg['fichier'])): ?>
-
-                    <?php
-        $ext = pathinfo($msg['fichier'], PATHINFO_EXTENSION);
-        $fichier_path = "../uploads/" . htmlspecialchars($msg['fichier']);
-        if (in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'pdf'])) {
-            echo '<a href="' . $fichier_path . '" target="_blank" style="color: blue; text-decoration: underline;">Voir le fichier</a>';
-        } else {
-            echo '<p><em>Fichier non supporté pour l\'affichage</em></p>';
-        }
-    ?>
-
-                <?php endif; ?>
+    <div class="forum-container">
+        <header class="forum-header">
+            <h1 class="forum-title">Forum : <?= htmlspecialchars($matiere_nom) ?></h1>
+            <div class="user-info">
+                <p class="user-details">Connecté : <span class="user-name"><?= htmlspecialchars($user_prenom . ' ' . $user_nom) ?></span> <span class="user-role">(<?= htmlspecialchars($role) ?>)</span></p>
+                <a href="<?= $role === 'etudiant' ? 'dashboard_etudiant.php' : 'dashboard_enseignant.php' ?>" class="btn btn-back">Retour au tableau de bord</a>
             </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>Aucun message pour cette matière.</p>
-    <?php endif; ?>
+        </header>
+
+        <main class="forum-content">
+            <form method="POST" enctype="multipart/form-data" class="message-form">
+                <div class="form-group">
+                    <textarea name="message" placeholder="Votre message" class="message-input" required></textarea>
+                </div>
+                <div class="form-group">
+                <div class="file-upload">
+    <input type="file" id="fichier" name="fichier" style="display: none;">
+    <label for="fichier" class="file-label">Ajouter un fichier</label>
+</div>
+
+                </div>
+                <button type="submit" class="btn btn-send">Envoyer</button>
+            </form>
+
+            <section class="messages-section">
+                <h2 class="section-title">Messages</h2>
+                <?php if (!empty($messages)): ?>
+                    <div class="messages-list">
+                        <?php foreach ($messages as $msg): ?>
+                            <article class="message-card">
+                                <header class="message-header">
+                                    <h3 class="message-author"><?= htmlspecialchars($msg['prenom'] . ' ' . $msg['nom']) ?> <span class="author-role">(<?= $msg['type_auteur'] ?>)</span></h3>
+                                    <time class="message-date"><?= $msg['date_message'] ?></time>
+                                </header>
+                                <div class="message-content">
+                                    <p><?= nl2br(htmlspecialchars($msg['message'])) ?></p>
+                                </div>
+                                <?php if (!empty($msg['fichier'])): ?>
+                                    <footer class="message-footer">
+                                        <?php
+                                            $ext = pathinfo($msg['fichier'], PATHINFO_EXTENSION);
+                                            $fichier_path = "../uploads/" . htmlspecialchars($msg['fichier']);
+                                            if (in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'pdf'])) {
+                                                echo '<a href="' . $fichier_path . '" target="_blank" class="file-link">Voir le fichier</a>';
+                                            } else {
+                                                echo '<p class="file-notice">Fichier non supporté pour l\'affichage</p>';
+                                            }
+                                        ?>
+                                    </footer>
+                                <?php endif; ?>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="empty-message">Aucun message pour cette matière.</p>
+                <?php endif; ?>
+            </section>
+        </main>
+    </div>
+
+
+
+    <script>
+    // Auto-scroll en bas
+    window.addEventListener("load", () => {
+        const section = document.querySelector(".messages-section");
+        section.scrollTop = section.scrollHeight;
+    });
+
+    // Affichage du nom de fichier
+    document.getElementById("fichier").addEventListener("change", function () {
+        const label = document.querySelector(".file-label");
+        const fileName = this.files[0] ? this.files[0].name : "Ajouter un fichier";
+        label.textContent = fileName.length > 30 ? fileName.slice(0, 27) + "..." : fileName;
+    });
+</script>
+
 </body>
 </html>

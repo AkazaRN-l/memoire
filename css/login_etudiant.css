@@ -1,256 +1,289 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+/* Variables pour un thème facilement modifiable */
+:root {
+    --primary-color: #3f51b5; /* Un bleu plus profond et élégant */
+    --primary-dark: #303f9f; /* Bleu plus foncé pour le survol */
+    --secondary-color: #28a745; /* Vert pour le bouton d'inscription */
+    --secondary-dark: #218838;
+    --text-color: #333;
+    --light-text-color: #ffffff;
+    --card-background: rgba(255, 255, 255, 0.95); /* Fond de carte presque opaque */
+    --error-color: #dc3545;
+    --border-light: #e0e0e0;
+    --shadow-soft: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.2);
+    --blur-intensity: 8px; /* Intensité du flou de l'arrière-plan */
+    --panel-overlay-color: rgba(63, 81, 181, 0.7); /* Surcouche colorée semi-transparente pour le panneau gauche */
 }
 
 body {
-    background-image: url("../photo/inverse.jpg");
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    
+    min-height: 100vh;
+    color: var(--text-color);
+    overflow: hidden; /* Important pour l'effet de flou sur le body */
+
+    /* Arrière-plan avec image et flou */
+    background-image: url('../photo/satellitenew.jpg'); /* Image d'arrière-plan aléatoire */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative; /* Pour le pseudo-élément de flou */
 }
 
-.container {
+/* Pseudo-élément pour appliquer le flou sur l'arrière-plan du body */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: inherit; /* Hérite de l'image de fond du body */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: blur(var(--blur-intensity)); /* Applique le flou */
+    -webkit-filter: blur(var(--blur-intensity));
+    z-index: -1; /* Place le flou derrière le contenu */
+}
+
+/* Conteneur principal qui contient les deux panneaux */
+.login-container {
     display: flex;
+    background-color: var(--card-background); /* Fond de carte blanc presque opaque */
+    border-radius: 15px; /* Coins légèrement arrondis */
+    box-shadow: 0 10px 25px var(--shadow-medium);
+    max-width: 950px; /* Taille généreuse pour l'effet bicolore */
+    width: 90%;
+    overflow: hidden; /* Assure que les coins arrondis sont respectés */
+    z-index: 2; /* S'assure que le conteneur est au-dessus du fond flou */
+    animation: fadeInScale 0.7s ease-out; /* Animation d'apparition */
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Panneau gauche (image floutée transparente) */
+.left-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 80%;
-    max-width: 1100px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-}
-
-/* Section Image */
-.image-section {
-    flex: 1;
     text-align: center;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+
+    /* Le fond du panneau gauche hérite de l'image floutée du body */
+    /* Alternative 1: Simple surcouche colorée semi-transparente pour le panneau gauche */
+    background-color: var(--panel-overlay-color);
+    color: var(--light-text-color);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Ombre pour la lisibilité sur le fond coloré */
+
+    /* Alternative 2: Si vous voulez une image floutée UNIQUE pour le panneau gauche (décommentez et commentez Alt 1) */
+    /*
+    background-image: url('https://source.unsplash.com/random/800x600/?abstract-tech,data,light');
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    */
 }
 
-.image-section img {
-    width: 100%;
-    max-width: 350px;
-    border-radius: 10px;
-}
-
-/* Section Formulaire */
-.login-box {
-    flex: 1;
-    padding: 30px;
-    color: white;
-    text-align: center;
-}
-
-h2 {
-    font-size: 24px;
+.left-panel h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.8rem;
     font-weight: 700;
 }
 
-p {
-    font-size: 14px;
-    opacity: 0.8;
+.left-panel p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-weight: 300;
 }
 
-/* Champs de saisie */
-.input-group {
-    position: relative;
-    margin: 15px 0;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background: rgba(255, 255, 255, 0.2);
+.left-panel .illustration {
+    max-width: 80%;
+    height: auto;
     border-radius: 8px;
-    font-size: 16px;
-    color: white;
-    outline: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    margin-top: 1.5rem;
+    filter: brightness(1.1); /* Pour qu'elle ressorte un peu du flou */
 }
 
-.input-group label {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: white;
-    opacity: 0.7;
-    transition: 0.3s;
-    pointer-events: none;
+/* Panneau droit (formulaire de connexion) */
+.right-panel {
+    flex: 1.2; /* Permettre au panneau de droite d'être légèrement plus large */
+    padding: 2.5rem 3rem; /* Plus de padding horizontal */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white); /* Le formulaire est sur un fond blanc */
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05); /* Petite ombre à gauche du panneau pour la séparation */
 }
 
-/* Effet qui fait monter le label */
-.input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label {
-    top: 5px;
-    font-size: 12px;
-    color: #ffd700;
-    opacity: 1;
-}
-
-/* Bouton */
-button {
+.login-box {
     width: 100%;
-    padding: 12px;
-    background: #ffd700;
-    border: none;
-    border-radius: 6px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
+    max-width: 400px; /* Largeur fixe pour le formulaire */
+    text-align: center;
 }
 
-button:hover {
-    background: #ffbb00;
+.login-box h2 {
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-weight: 700;
 }
 
-/* Lien d'inscription */
-.register-link {
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-.register-link a {
-    color: #ffd700;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.register-link a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive */
-@media (max-width: 800px) {
-    .container {
-        flex-direction: column;
-        width: 90%;
-    }
-    
-    .image-section {
-        margin-bottom: 20px;
-    }
-}
-
-.register-btn {
-    width: 100%;
-    padding: 12px;
-    background: white;
-    color: #333;
-    border: none;
-    border-radius: 6px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: 0.3s;
-}
-
-.register-btn:hover {
-    background: #f0f0f0;
-}
-
-.or-divider {
+.error-msg {
+    background-color: #ffebeb;
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    text-align: center;
     display: flex;
     align-items: center;
-    text-align: center;
-    margin: 15px 0;
+    justify-content: center;
+    gap: 8px;
+    animation: fadeIn 0.5s ease-out;
 }
 
-.or-divider::before,
-.or-divider::after {
-    content: "";
-    flex: 1;
-    border-bottom: 1px solid #ccc;
-    margin: 0 10px;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.or-divider span {
-    font-size: 14px;
-    font-weight: bold;
-    color: #555;
+.input-group {
+    margin-bottom: 1.2rem;
 }
 
-/* Positionner l'icône dans la case */
-.password-group {
-    position: relative;
-}
-
-
-/* Conteneur du champ de sélection */
+.input-group input,
 .input-group select {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #bdc3c7;
-    border-radius: 8px;
-    font-size: 14px;
-    background: white;
-    appearance: none; /* Cache l'apparence par défaut */
-    cursor: pointer;
+    padding: 14px 18px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--white);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
 }
 
-/* Effet au survol */
-.input-group select:hover {
-    border-color: #3498db;
-}
-
-/* Effet lorsqu'on clique */
+.input-group input:focus,
 .input-group select:focus {
-    border-color: #2980b9;
-    box-shadow: 0px 0px 5px rgba(41, 128, 185, 0.5);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
     outline: none;
 }
 
+/* Styles pour le select */
+.input-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M10%2012l-6-6h12z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 10px;
+}
+
+/* Style pour le placeholder du select quand non sélectionné */
+.input-group select.placeholder-active {
+    color: var(--secondary-gray); /* Utilisez une variable si définie */
+}
+.input-group select:not(.placeholder-active) {
+    color: var(--text-color);
+}
+.input-group select option[value=""][disabled] {
+    display: none;
+}
+
+
+.btn-primary, .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(63, 81, 181, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(63, 81, 181, 0.3);
+}
 
 .forgot-password {
-    font-size: 0.8rem;
-    color: #a8a6a6;
+    display: block;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--primary-color);
     text-decoration: none;
-    position: relative;
-    top: 320px;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    transition: color 0.3s ease;
 }
 
 .forgot-password:hover {
-    color: var(--primary-color);
+    color: var(--primary-dark);
+    text-decoration: underline;
 }
 
-
-/* Ajustement pour le groupe mot de passe */
-.password-group {
+.or-divider {
+    border-bottom: 1px solid var(--border-light);
+    margin: 2rem 0;
     position: relative;
-    margin-bottom: 25px;
 }
 
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--light-text-color);
+    margin-top: 1rem;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
 
+.btn-secondary:hover {
+    background-color: var(--secondary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
+}
 
-
-
-
-/* Conteneur principal */
+/* Styles pour le checkbox "Afficher le mot de passe" */
 .show-password-container {
     display: flex;
     align-items: center;
-    margin: 12px 0 20px;
-    position: relative;
-    padding-left: 30px;
+    justify-content: flex-start; /* Aligner à gauche */
+    margin-bottom: 1.5rem;
     cursor: pointer;
     user-select: none;
-    bottom: 20px;
-    left: 130px;
+    font-size: 0.9rem;
+    color: var(--text-color);
 }
 
-/* Cache la checkbox par défaut */
-.show-password-container input {
+.show-password-container input[type="checkbox"] {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -258,74 +291,170 @@ button:hover {
     width: 0;
 }
 
-/* Case à cocher personnalisée */
 .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    background-color: white;
-    border: 2px solid var(--primary-color);
+    height: 18px;
+    width: 18px;
+    background-color: var(--border-light);
+    border: 1px solid var(--border-light);
     border-radius: 4px;
-    transition: all 0.3s ease;
+    display: inline-block;
+    position: relative;
+    margin-right: 8px;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Au survol */
-.show-password-container:hover input ~ .checkmark {
-    background-color: #f1f1f1;
-}
-
-/* Quand cochée */
-.show-password-container input:checked ~ .checkmark {
+.show-password-container input[type="checkbox"]:checked ~ .checkmark {
     background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
-/* Marque de validation (cachée par défaut) */
 .checkmark:after {
     content: "";
     position: absolute;
     display: none;
-}
-
-/* Affiche la marque quand cochée */
-.show-password-container input:checked ~ .checkmark:after {
-    display: block;
-}
-
-/* Style de la marque */
-.show-password-container .checkmark:after {
     left: 6px;
     top: 2px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
+    width: 4px;
+    height: 9px;
+    border: solid var(--light-text-color);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
 
-/* Texte du label */
-.show-password-container label {
-    margin-left: 8px;
-    color: var(--dark-color);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: color 0.3s ease;
+.show-password-container input[type="checkbox"]:checked ~ .checkmark:after {
+    display: block;
 }
 
-/* Effet au survol du texte */
-.show-password-container:hover label {
-    color: var(--primary-color);
-}
 
-/* Version pour thème sombre */
-@media (prefers-color-scheme: dark) {
-    .checkmark {
-        background-color: #2d2d2d;
-        border-color: var(--accent-color);
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column; /* Les panneaux s'empilent sur les petits écrans */
+        width: 95%;
+        max-width: 450px; /* Taille maximale pour mobile */
+        border-radius: 12px;
     }
-    
-    .show-password-container label {
-        color: #e0e0e0;
+
+    .left-panel {
+        padding: 1.8rem;
+        border-radius: 12px 12px 0 0; /* Coins arrondis en haut seulement */
+    }
+
+    .left-panel h1 {
+        font-size: 2.2rem;
+    }
+
+    .left-panel p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .left-panel .illustration {
+        max-width: 70%; /* Plus petite sur mobile */
+        margin-top: 1rem;
+    }
+
+    .right-panel {
+        padding: 1.8rem;
+        border-radius: 0 0 12px 12px; /* Coins arrondis en bas seulement */
+        box-shadow: none; /* Pas d'ombre interne sur mobile */
+    }
+
+    .login-box h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-group input,
+    .input-group select,
+    .btn-primary, .btn-secondary {
+        padding: 12px 15px;
+        font-size: 1rem;
+    }
+
+    .error-msg {
+        font-size: 0.85rem;
+        padding: 10px 15px;
+    }
+}
+
+
+
+/* --- Styles spécifiques pour la page Mot de passe oublié --- */
+
+/* Ajustement pour le conteneur principal si nécessaire pour les pages secondaires */
+.login-container.password-reset-container {
+    max-width: 800px; /* Peut-être un peu moins large que la page de login */
+}
+
+.login-container.password-reset-container .left-panel {
+    background-color: var(--panel-overlay-color); /* Utilise la même couleur de surcouche */
+    /* Si vous voulez une image floutée différente pour le panneau gauche de cette page, décommentez et ajustez: */
+    /*
+    background-image: url('https://source.unsplash.com/random/800x600/?password,security,lock');
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    background-blend-mode: overlay;
+    */
+}
+
+.login-container.password-reset-container .left-panel h1 {
+    font-size: 2.5rem; /* Taille de titre ajustée */
+}
+
+.login-container.password-reset-container .left-panel p {
+    font-size: 1rem; /* Taille de texte ajustée */
+    margin-bottom: 1.5rem;
+}
+
+.login-container.password-reset-container .left-panel .illustration {
+    max-width: 70%; /* Rendre l'illustration plus petite si nécessaire */
+}
+
+.login-container.password-reset-container .right-panel {
+    padding: 2.2rem 2.5rem; /* Ajuster le padding pour le formulaire de réinitialisation */
+}
+
+.login-container.password-reset-container .login-box h2 {
+    font-size: 2rem; /* Taille du titre du formulaire */
+    margin-bottom: 1.5rem;
+}
+
+/* Style pour le lien "Retour à la connexion" */
+.back-to-login {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.back-to-login:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* Pas besoin d'un style spécifique pour .error-msg, .input-group, les boutons,
+   car ils utilisent déjà les classes génériques (.btn-primary, .error-msg etc.)
+   définies pour login_etudiant.css et seront donc cohérents. */
+
+/* Responsive adjustments for motdepasse_oublie.php */
+@media (max-width: 768px) {
+    .login-container.password-reset-container {
+        flex-direction: column;
+        border-radius: 12px;
+    }
+
+    .login-container.password-reset-container .left-panel {
+        border-radius: 12px 12px 0 0;
+    }
+
+    .login-container.password-reset-container .right-panel {
+        border-radius: 0 0 12px 12px;
+        box-shadow: none;
     }
 }

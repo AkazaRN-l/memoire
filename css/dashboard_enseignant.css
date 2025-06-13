@@ -1476,3 +1476,27 @@ body {
 .visio-stop-container i {
     margin-right: 8px;
 }
+
+.btn-forum {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Couleur verte - modifiable */
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-forum:hover {
+    background-color: #45a049; /* Couleur légèrement plus foncée au survol */
+}
+
+.btn-forum:active {
+    background-color: #3e8e41; /* Couleur encore plus foncée quand cliqué */
+}

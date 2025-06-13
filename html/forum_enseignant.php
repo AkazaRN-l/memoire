@@ -17,7 +17,6 @@ $error = '';
 
 $niveaux = ["licence I", "licence II", "licence III", "master I", "master II"];
 
-// Récupérer les matières
 $matieres = [];
 if (!empty($niveau)) {
     $stmt = $conn->prepare("SELECT id, nom FROM matieres WHERE niveau = ?");
@@ -27,14 +26,12 @@ if (!empty($niveau)) {
     $stmt->close();
 }
 
-// Traitement du message
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
     $message = trim($_POST['message']);
     $niveau_post = $_POST['niveau'] ?? '';
     $matiere_id_post = $_POST['matiere_id'] ?? '';
     $fichier_nom = null;
 
-    // Upload du fichier
     if (!empty($_FILES['fichier']['name'])) {
         $fichier_nom = basename($_FILES['fichier']['name']);
         move_uploaded_file($_FILES['fichier']['tmp_name'], "../uploads/" . $fichier_nom);
@@ -56,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
     }
 }
 
-// Récupération des messages
 if ($niveau && $matiere_id) {
     $stmt = $conn->prepare("SELECT fm.*, m.nom AS matiere_nom FROM forum_messages fm
                             JOIN matieres m ON fm.matiere_id = m.id
@@ -74,83 +70,110 @@ if ($niveau && $matiere_id) {
 <head>
     <meta charset="UTF-8">
     <title>Forum Enseignant</title>
-    <style>
-        body { font-family: Arial; background: #f0f0f0; padding: 20px; }
-        form, .forum { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .message { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
-        .success { color: green; }
-        .error { color: red; }
-        iframe, img { max-width: 100%; height: auto; margin-top: 10px; }
-    </style>
+    <link rel="stylesheet" href="../css/forum_enseignant.css">
+    <script>
+        function changerNiveau(select) {
+            const niveau = select.value;
+            if (niveau) {
+                window.location.href = 'forum_enseignant.php?niveau=' + encodeURIComponent(niveau);
+            }
+        }
+
+        function changerMatiere(select) {
+            const matiere = select.value;
+            const params = new URLSearchParams(window.location.search);
+            params.set('matiere_id', matiere);
+            window.location.search = params.toString();
+        }
+
+        function afficherNomFichier(input) {
+            const nomFichier = input.files[0]?.name ?? "";
+            document.getElementById('nom-fichier').textContent = nomFichier;
+        }
+    </script>
+   
 </head>
 <body>
-    <h2>Forum - Enseignant</h2>
+    <div class="container">
+        <h2>Forum - Espace Enseignant</h2>
 
-    <?php if ($success): ?><p class="success"><?= htmlspecialchars($success) ?></p><?php endif; ?>
-    <?php if ($error): ?><p class="error"><?= htmlspecialchars($error) ?></p><?php endif; ?>
+        <?php if ($success): ?><p class="success"><?= htmlspecialchars($success) ?></p><?php endif; ?>
+        <?php if ($error): ?><p class="error"><?= htmlspecialchars($error) ?></p><?php endif; ?>
 
-    <form method="post" enctype="multipart/form-data">
-        <label>Niveau:</label>
-        <select name="niveau" onchange="window.location.href='forum_enseignant.php?niveau=' + encodeURIComponent(this.value)">
-            <option value="">-- Choisir --</option>
-            <?php foreach ($niveaux as $niv): ?>
-                <option value="<?= $niv ?>" <?= ($niveau === $niv) ? 'selected' : '' ?>><?= $niv ?></option>
-            <?php endforeach; ?>
-        </select>
-
-        <?php if (!empty($matieres)): ?>
-            <label>Matière:</label>
-            <select name="matiere_id" onchange="window.location.href='forum_enseignant.php?niveau=<?= urlencode($niveau) ?>&matiere_id=' + this.value">
+        <form method="post" enctype="multipart/form-data">
+            <label>Niveau :</label>
+            <select name="niveau" onchange="changerNiveau(this)">
                 <option value="">-- Choisir --</option>
-                <?php foreach ($matieres as $matiere): ?>
-                    <option value="<?= $matiere['id'] ?>" <?= ($matiere_id == $matiere['id']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($matiere['nom']) ?>
-                    </option>
+                <?php foreach ($niveaux as $niv): ?>
+                    <option value="<?= $niv ?>" <?= ($niveau === $niv) ? 'selected' : '' ?>><?= $niv ?></option>
                 <?php endforeach; ?>
             </select>
-        <?php endif; ?>
+
+            <?php if (!empty($matieres)): ?>
+                <label>Matière :</label>
+                <select name="matiere_id" onchange="changerMatiere(this)">
+                    <option value="">-- Choisir --</option>
+                    <?php foreach ($matieres as $matiere): ?>
+                        <option value="<?= $matiere['id'] ?>" <?= ($matiere_id == $matiere['id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($matiere['nom']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            <?php endif; ?>
+
+            <?php if ($niveau && $matiere_id): ?>
+                <label>Message :</label>
+                <textarea name="message" rows="4" required></textarea>
+
+                <label>Fichier (optionnel) :</label>
+                <input type="file" name="fichier" onchange="afficherNomFichier(this)">
+                <span id="nom-fichier"></span>
+
+                <button type="submit">Envoyer</button>
+            <?php endif; ?>
+        </form>
 
         <?php if ($niveau && $matiere_id): ?>
-            <br><br>
-            <label>Message:</label><br>
-            <textarea name="message" rows="4" cols="50" required></textarea><br><br>
+            <div class="forum">
+                <h3>Messages - <?= htmlspecialchars($niveau) ?> / <?= isset($messages[0]['matiere_nom']) ? htmlspecialchars($messages[0]['matiere_nom']) : '' ?></h3>
 
-            <label>Fichier (optionnel):</label>
-            <input type="file" name="fichier"><br><br>
+                <?php if ($messages): ?>
+                    
 
-            <button type="submit">Envoyer</button>
+
+                    <?php foreach ($messages as $msg): ?>
+    <div class="message <?= $msg['type_auteur'] === 'enseignant' ? 'message-enseignant' : 'message-autre' ?>">
+        <p><?= nl2br(htmlspecialchars($msg['message'])) ?></p>
+
+        <!-- Affichage du fichier en bas du texte -->
+        <?php if (!empty($msg['fichier'])): ?>
+            <div class="fichier-section">
+                <?php
+                    $ext = pathinfo($msg['fichier'], PATHINFO_EXTENSION);
+                    $fichier_path = "../uploads/" . htmlspecialchars($msg['fichier']);
+                    if (in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'pdf'])) {
+                        echo '<a href="' . $fichier_path . '" target="_blank" class="fichier-lien">Voir le fichier</a>';
+                    } else {
+                        echo '<p><em>Fichier non supporté pour l\'affichage</em></p>';
+                    }
+                ?>
+            </div>
         <?php endif; ?>
-    </form>
 
-    <?php if ($niveau && $matiere_id): ?>
-        <div class="forum">
-            <h3>Messages - <?= htmlspecialchars($niveau) ?> / 
-                <?= isset($messages[0]['matiere_nom']) ? htmlspecialchars($messages[0]['matiere_nom']) : '' ?></h3>
+        <small>Posté le <?= $msg['date_message'] ?></small>
+    </div>
+<?php endforeach; ?>
 
-            <?php if ($messages): ?>
-                <?php foreach ($messages as $msg): ?>
-                    <div class="message">
-                        <p><?= nl2br(htmlspecialchars($msg['message'])) ?></p>
 
-                        <?php if (!empty($msg['fichier'])): ?>
-    <?php
-        $ext = pathinfo($msg['fichier'], PATHINFO_EXTENSION);
-        $fichier_path = "../uploads/" . htmlspecialchars($msg['fichier']);
-        if (in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'pdf'])) {
-            echo '<a href="' . $fichier_path . '" target="_blank" style="color: blue; text-decoration: underline;">Voir le fichier</a>';
-        } else {
-            echo '<p><em>Fichier non supporté pour l\'affichage</em></p>';
-        }
-    ?>
-<?php endif; ?>
 
-                        <small><br>Posté le <?= $msg['date_message'] ?></small>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Aucun message pour ce niveau et cette matière.</p>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
+
+
+
+                <?php else: ?>
+                    <p>Aucun message pour ce niveau et cette matière.</p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 </body>
 </html>

@@ -1,0 +1,305 @@
+/* Reset et base */
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f7fb;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+  
+  /* Titre */
+  h2 {
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #007bff;
+    text-align: center;
+  }
+  
+  /* Formulaire */
+  form {
+    margin-bottom: 30px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  
+  select, textarea, input[type="file"], button {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1.8px solid #ddd;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  select:focus, textarea:focus, input[type="file"]:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Messages forum - style chat */
+  .forum {
+    max-height: 480px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    background: #fafafa;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+  }
+  
+  .message {
+    display: flex;
+    margin-bottom: 18px;
+    max-width: 70%;
+    padding: 15px 18px;
+    border-radius: 20px;
+    word-wrap: break-word;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    position: relative;
+    font-size: 1rem;
+  }
+  
+  /* Avatar */
+  .message::before {
+    content: '';
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    margin-right: 12px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    position: relative;
+    top: 3px;
+  }
+  
+  /* Enseignant à droite */
+  .message-enseignant {
+    background-color: #dbeeff;
+    margin-left: auto;
+    flex-direction: row-reverse;
+  }
+  
+  .message-enseignant::before {
+    background-image: url('https://cdn-icons-png.flaticon.com/512/149/149071.png');
+    margin-left: 12px;
+    margin-right: 0;
+  }
+  
+  /* Autres à gauche */
+  .message-autre {
+    background-color: #fff3cd;
+  }
+  
+  .message-autre::before {
+    background-image: url('https://cdn-icons-png.flaticon.com/512/1946/1946429.png');
+  }
+  
+  /* Fichier joint */
+  .fichier-lien {
+    display: inline-block;
+    margin-top: 8px;
+    color: #007bff;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.25s ease;
+  }
+  
+  .fichier-lien:hover {
+    border-color: #0056b3;
+  }
+  
+  /* Date message */
+  .message small {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 8px;
+    text-align: right;
+  }
+  
+  /* Success & Error */
+  .success {
+    color: #28a745;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .error {
+    color: #dc3545;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 720px) {
+    .message {
+      max-width: 90%;
+    }
+    body {
+      padding: 15px 10px;
+    }
+    .container {
+      padding: 20px 15px;
+    }
+  }
+
+
+
+  body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9fb;
+      padding: 30px;
+  }
+
+  .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+
+  h2 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 30px;
+  }
+
+  label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+  }
+
+  select, textarea, input[type="file"], button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+  }
+
+  button {
+      background-color: #1d4ed8;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+  }
+
+  button:hover {
+      background-color: #2563eb;
+  }
+
+  .success {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 10px;
+      border-radius: 8px;
+  }
+
+  .error {
+      background-color: #fee2e2;
+      color: #991b1b;
+      padding: 10px;
+      border-radius: 8px;
+  }
+
+  .message {
+      border-left: 5px solid #60a5fa;
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+  }
+
+  .message-enseignant {
+      border-color: #1d4ed8;
+  }
+
+  .message-autre {
+      border-color: #f59e0b;
+  }
+
+  .forum h3 {
+      margin-top: 40px;
+      font-size: 22px;
+      margin-bottom: 20px;
+  }
+
+  .fichier-lien {
+      display: inline-block;
+      margin-top: 8px;
+      color: #2563eb;
+      text-decoration: underline;
+  }
+
+  small {
+      display: block;
+      margin-top: 10px;
+      color: #6b7280;
+  }
+
+
+
+  .message {
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    position: relative;
+}
+
+.fichier-section {
+    margin-top: 10px;
+}
+
+.fichier-lien {
+    display: inline-block;
+    margin-top: 5px;
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.fichier-lien:hover {
+    text-decoration: underline;
+}

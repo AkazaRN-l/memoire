@@ -34,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'rahaja.ranjanirina@gmail.com'; // Ton email
-            $mail->Password = 'lmgf mzzx nyut xseq';   // Ton mot de passe d'application
+            $mail->Username = 'rahaja.ranjanirina@gmail.com'; 
+            $mail->Password = 'lmgf mzzx nyut xseq';    
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
@@ -73,42 +73,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mot de passe oublié</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mot de passe oublié | Télécommunications</title>
     <link rel="stylesheet" href="../css/login_etudiant.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="container">
-    <div class="login-box">
-        <h2>Mot de passe oublié</h2>
-
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="error-msg"><?= htmlspecialchars($_SESSION['error']) ?></div>
-            <?php unset($_SESSION['error']); ?>
-        <?php endif; ?>
-
-        <form method="POST">
-            <div class="input-group">
-                <input type="text" name="matricule" required placeholder=" ">
-                <label>Numéro d'inscription</label>
+    <div class="main-wrapper">
+        <div class="login-container password-reset-container">
+            <div class="left-panel">
+                <h1>Réinitialisation du mot de passe</h1>
+                <p>Entrez votre numéro d'inscription et votre niveau pour recevoir un code de réinitialisation par email.</p>
             </div>
-            <div class="input-group">
-                <select name="niveau" required>
-                    <option value="" disabled selected>Choisir votre niveau</option>
-                    <option value="Licence I">Licence I</option>
-                    <option value="Licence II">Licence II</option>
-                    <option value="Licence III">Licence III</option>
-                    <option value="Master I">Master I</option>
-                    <option value="Master II">Master II</option>
-                </select>
-                <label style="transform: translateY(-35px) scale(0.8);">Niveau</label>
-            </div>
-            <button type="submit">Envoyer le code</button>
-        </form>
+            <div class="right-panel">
+                <div class="login-box">
+                    <h2>Mot de passe oublié</h2>
 
-        <div style="text-align:center; margin-top:20px;">
-            <a href="login_etudiant.php">Retour à la connexion</a>
+                    <?php if (isset($_SESSION['error'])): ?>
+                        <p class="error-msg"><?= htmlspecialchars($_SESSION['error']) ?></p>
+                        <?php unset($_SESSION['error']); ?>
+                    <?php endif; ?>
+
+                    <form method="POST">
+                        <div class="input-group">
+                            <input type="text" name="matricule" required placeholder="Numéro d'inscription">
+                        </div>
+                        <div class="input-group">
+                            <select name="niveau" id="niveau_reset" required class="placeholder-active">
+                                <option value="" disabled selected>Sélectionnez votre niveau</option>
+                                <option value="Licence I">Licence I</option>
+                                <option value="Licence II">Licence II</option>
+                                <option value="Licence III">Licence III</option>
+                                <option value="Master I">Master I</option>
+                                <option value="Master II">Master II</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Envoyer le code</button>
+                    </form>
+
+                    <div style="text-align:center; margin-top:20px;">
+                        <a href="login_etudiant.php" class="back-to-login">Retour à la connexion</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const niveauSelectReset = document.getElementById('niveau_reset'); // ID unique pour ce select
+            function updateSelectPlaceholderReset() {
+                if (niveauSelectReset.value === "") {
+                    niveauSelectReset.classList.add('placeholder-active');
+                } else {
+                    niveauSelectReset.classList.remove('placeholder-active');
+                }
+            }
+            niveauSelectReset.addEventListener('change', updateSelectPlaceholderReset);
+            updateSelectPlaceholderReset(); // Appel initial
+        });
+    </script>
 </body>
 </html>

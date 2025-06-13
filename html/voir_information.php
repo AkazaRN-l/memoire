@@ -147,8 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['renouveler_annee'])) 
                         </div>
                         
                         <div class="card-body">
-                            <p><?= nl2br(htmlspecialchars($info['contenu'])) ?></p>
-                        </div>
+    <p><?= nl2br($info['contenu']) ?></p>
+</div>
                         
                         <div class="card-footer">
                         <span class="date-publi">

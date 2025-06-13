@@ -99,7 +99,7 @@ $user = $result->fetch_assoc();
 <div class="account-container">
 <aside class="sidebar">
 
-<img src="../photo/satellite-dish-310868_1920.png" alt="Logo Chef" style="width: 50px; display: block; margin: 0 auto 10px;">
+<img src="../photo/Logo_Mention.jpg" alt="Logo Chef" style="width: 50px; display: block; margin: 0 auto 10px;">
     <h2>Chef de Mention</h2>
     <nav>
         <ul>
