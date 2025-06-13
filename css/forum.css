@@ -61,7 +61,7 @@ body {
 }
 
 .message-input {
-  width: 100%;
+  width: 97%;
   height: 100px;
   padding: 12px;
   border: 1px solid #ccc;
@@ -197,3 +197,4 @@ input[type="file"] {
   font-style: italic;
   padding: 20px;
 }
+

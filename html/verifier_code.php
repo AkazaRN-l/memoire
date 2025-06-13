@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Vérification du code</title>
-    <link rel="stylesheet" href="../css/login_etudiant.css">
+    <link rel="stylesheet" href="../css/verifier_code.css">
 </head>
 <body>
 <div class="box">
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="input-group">
             <input type="text" name="code" placeholder="Entrez le code reçu par email" required>
         </div>
-        <button type="submit">Vérifier</button>
+        <button class="bouton" type="submit">Vérifier</button>
     </form>
 </div>
 </body>

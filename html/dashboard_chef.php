@@ -73,6 +73,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['etudiant_id'])) {
             $mail->Subject = 'Validation de votre inscription';
             $mail->Body = "Bonjour {$etudiant['prenom']} {$etudiant['nom']},\n\nVotre inscription a été validée par le chef de mention. Vous pouvez maintenant accéder à la plateforme.\n\nCordialement,\nMention Télécommunication";
 
+
+
+
+$mail->SMTPOptions = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+    )
+);
+
+
+
+
+
+
             $mail->send();
             $_SESSION['success'] = "✅ Étudiant validé avec succès, email envoyé à {$etudiant['email']}";
         } catch (Exception $e) {

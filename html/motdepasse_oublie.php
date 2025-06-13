@@ -38,12 +38,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Password = 'lmgf mzzx nyut xseq';    
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
+            $mail->CharSet= 'UTF-8';
+
+
+
+            $mail->SMTPOptions = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+    )
+);
+
+
+
 
             $mail->setFrom('rahaja.ranjanirina@gmail.com', 'Université de Vakinankaratra');
             $mail->addAddress($user['email']);
             $mail->isHTML(true);
             $mail->Subject = "Code de réinitialisation du mot de passe";
-            $mail->Body = "Bonjour,<br><br>Voici votre code de réinitialisation : <strong style='font-size: 18px;'>$code</strong><br>Ce code expirera dans 15 minutes.<br><br>Université de Vakinankaratra.";
+            $mail->Body = "Bonjour,<br><br>Voici votre code de réinitialisation : <strong style='font-size: 18px;'>$code</strong><br>Ce code expirera dans 15 minutes.<br><br>Mention télécommunication.";
 
             $mail->send();
 
