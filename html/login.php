@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="background-image"></div>
 
     <div class="login-container">
-        <h2>🔑 Connexion Chef de Mention</h2>
+        <h2>🔑 Connexion Responsable de Mention</h2>
 
         <?php if (isset($error)) { ?>
             <p class="error-msg"><?= $error ?></p>

@@ -1,25 +1,2 @@
-<?php
-session_start();
+<!-- login_admin.php -->/* admin_login.css */ 
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-// Accès différent selon le rôle
-switch($_SESSION['role']) {
-    case 'etudiant':
-        // Contenu étudiant
-        break;
-    case 'enseignant':
-        // Contenu enseignant
-        break;
-    case 'chef_mention':
-        // Contenu chef de mention
-        break;
-    default:
-        // Rôle non reconnu
-        header("Location: login.php");
-        exit();
-}
-?>

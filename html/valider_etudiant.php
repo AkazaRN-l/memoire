@@ -2,7 +2,7 @@
 include 'config.php';
 session_start();
 
-// Vérifier si l'utilisateur est bien le chef de mention
+
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'chef_mention') {
     die("❌ Accès refusé.");
 }

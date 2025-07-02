@@ -120,7 +120,7 @@ $archived_infos = $infos_query->get_result();
 <div class="dashboard-container">
     <aside class="sidebar">
     <img src="../photo/satellite-dish-310868_1920.png" alt="Logo Chef" style="width: 50px; display: block; margin: 0 auto 10px;">
-        <h2>Chef de Mention</h2>
+        <h2>Responsable de Mention</h2>
         <nav>
             <ul>
                 <li><a href="dashboard_chef.php?niveau=Licence I">Licence I</a></li>

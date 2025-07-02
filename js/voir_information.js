@@ -412,3 +412,28 @@ function toggleEdit(id) {
         }, 10);
     }
 }
+
+
+// Fonction pour basculer l'édition
+function toggleEdit(id) {
+    const form = document.getElementById(`edit-form-${id}`);
+    const cardBody = form.closest('.info-card').querySelector('.card-body');
+    
+    form.classList.toggle('active');
+    cardBody.style.display = form.classList.contains('active') ? 'none' : 'block';
+}
+
+// Fermer les notifications
+document.addEventListener('DOMContentLoaded', function() {
+    // Cacher tous les formulaires d'édition au chargement
+    document.querySelectorAll('.edit-form').forEach(form => {
+        form.style.display = 'none';
+    });
+    
+    // Gestion des boutons de fermeture de notification
+    document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.parentElement.style.display = 'none';
+        });
+    });
+});

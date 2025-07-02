@@ -201,7 +201,7 @@ $stmt_appel->close();
 
         <!-- Annonces -->
         <section class="info-section">
-            <h2>📢 Annonces du Chef de Mention</h2>
+            <h2>📢 Annonces du Responsable de Mention</h2>
             <?php if ($result_info->num_rows > 0): ?>
                 <?php while ($info = $result_info->fetch_assoc()) : ?>
                     <div class="info-card">

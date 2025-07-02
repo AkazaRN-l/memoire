@@ -8,10 +8,42 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'chef_mention') {
     exit();
 }
 
-// Récupération du niveau avec sécurité
-$niveau_selected = isset($_GET['niveau']) ? $_GET['niveau'] : 'all';
+// Traitement de la suppression
+if (isset($_GET['delete_id'])) {
+    $stmt = $conn->prepare("DELETE FROM informations WHERE id = ?");
+    $stmt->bind_param("i", $_GET['delete_id']);
+    
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Information supprimée avec succès!";
+    } else {
+        $_SESSION['error'] = "Erreur lors de la suppression: " . $stmt->error;
+    }
+    
+    header("Location: voir_information.php");
+    exit();
+}
+
+// Traitement de la modification
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
+    $id = $_POST['id'];
+    $titre = $_POST['titre'];
+    $contenu = $_POST['contenu'];
+    
+    $stmt = $conn->prepare("UPDATE informations SET titre = ?, contenu = ? WHERE id = ?");
+    $stmt->bind_param("ssi", $titre, $contenu, $id);
+    
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Information mise à jour avec succès!";
+    } else {
+        $_SESSION['error'] = "Erreur lors de la mise à jour: " . $stmt->error;
+    }
+    
+    header("Location: voir_information.php");
+    exit();
+}
 
 // Récupération des informations
+$niveau_selected = $_GET['niveau'] ?? 'all';
 $sql = "SELECT id, titre, contenu, niveau, date_creation FROM informations";
 if ($niveau_selected !== 'all') {
     $sql .= " WHERE niveau = ?";
@@ -19,82 +51,16 @@ if ($niveau_selected !== 'all') {
 $sql .= " ORDER BY date_creation DESC";
 
 $stmt = $conn->prepare($sql);
-if ($stmt === false) {
-    die("Erreur de préparation de la requête: " . $conn->error);
-}
-
 if ($niveau_selected !== 'all') {
     $stmt->bind_param("s", $niveau_selected);
 }
-
-if (!$stmt->execute()) {
-    die("Erreur d'exécution de la requête: " . $stmt->error);
-}
-
+$stmt->execute();
 $result = $stmt->get_result();
-if ($result === false) {
-    die("Erreur de récupération des résultats: " . $conn->error);
-}
-
-// Récupérer l'année académique actuelle
-$current_year = $conn->query("SELECT * FROM annee_academique WHERE est_active = TRUE LIMIT 1")->fetch_assoc();
-
-// Traitement du formulaire de renouvellement
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['renouveler_annee'])) {
-    // Démarrer une transaction SQL
-    $conn->begin_transaction();
-
-    try {
-        // 1. Désactiver l'année actuelle
-        $conn->query("UPDATE annee_academique SET est_actuelle = FALSE WHERE est_actuelle = TRUE");
-
-        // 2. Créer une nouvelle année académique
-        if ($current_year) {
-            $years = explode('-', $current_year['annee']);
-            $new_start_year = (int)$years[1]; // 2026-2027 → 2027
-            $new_end_year = $new_start_year + 1; // 2028
-            $new_year = $new_start_year . '-' . $new_end_year; // 2027-2028
-        } else {
-            $new_year = (date('Y') + 1) . '-' . (date('Y') + 2);
-        }
-
-        $new_start = date('Y-m-d');
-        $new_end = date('Y-m-d', strtotime('+1 year'));
-
-        $stmt = $conn->prepare("INSERT INTO annee_academique (annee, date_debut, date_fin, est_actuelle) VALUES (?, ?, ?, TRUE)");
-        $stmt->bind_param("sss", $new_year, $new_start, $new_end);
-        $stmt->execute();
-        $new_year_id = $stmt->insert_id;
-
-        // 3. ARCHIVAGE DES COURS (adapté à votre structure)
-        $conn->query("
-            INSERT INTO archives_cours (cours_id, titre, description, enseignant_id, annee_id)
-            SELECT id, titre, description, enseignant_id, $new_year_id
-            FROM cours
-        ");
-        $conn->query("DELETE FROM cours"); // Suppression après archivage
-
-        // 4. ARCHIVAGE DES INFORMATIONS (adapté à votre structure)
-        $conn->query("
-            INSERT INTO archives_informations (info_id, titre, contenu, niveau, date_creation, annee_id)
-            SELECT id, titre, contenu, niveau, date_creation, $new_year_id
-            FROM informations
-        ");
-        $conn->query("DELETE FROM informations"); // Suppression après archivage
-
-        // Valider la transaction
-        $conn->commit();
-        $_SESSION['success'] = "✅ Année renouvelée avec succès! Toutes les données ont été archivées.";
-    } catch (Exception $e) {
-        // Annuler en cas d'erreur
-        $conn->rollback();
-        $_SESSION['error'] = "❌ Erreur: " . $e->getMessage();
-    }
-
-    header("Location: gerer_annee_academique.php");
-    exit();
-}
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="fr">

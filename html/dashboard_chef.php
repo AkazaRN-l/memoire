@@ -71,11 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['etudiant_id'])) {
 
             $mail->isHTML(false);
             $mail->Subject = 'Validation de votre inscription';
-            $mail->Body = "Bonjour {$etudiant['prenom']} {$etudiant['nom']},\n\nVotre inscription a été validée par le chef de mention. Vous pouvez maintenant accéder à la plateforme.\n\nCordialement,\nMention Télécommunication";
-
-
-
-
+            $mail->Body = "Bonjour {$etudiant['prenom']} {$etudiant['nom']},\n\nVotre inscription a été validée par le Responsable de mention. Vous pouvez maintenant accéder à la plateforme.\n\nCordialement,\nMention Télécommunication";
 $mail->SMTPOptions = array(
     'ssl' => array(
         'verify_peer' => false,
@@ -83,12 +79,6 @@ $mail->SMTPOptions = array(
         'allow_self_signed' => true
     )
 );
-
-
-
-
-
-
             $mail->send();
             $_SESSION['success'] = "✅ Étudiant validé avec succès, email envoyé à {$etudiant['email']}";
         } catch (Exception $e) {
@@ -126,7 +116,7 @@ $result_valides = $stmt->get_result();
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Chef de Mention</title>
+    <title>Tableau de bord responsable de Mention</title>
     <link rel="stylesheet" href="../css/dashboard_chef.css">
 </head>
 <body>
@@ -135,7 +125,7 @@ $result_valides = $stmt->get_result();
     <aside class="sidebar">
 
     <img src="../photo/Logo_Mention.jpg" alt="Logo Chef" style="width: 50px; display: block; margin: 0 auto 10px;">
-        <h2>Chef de Mention</h2>
+        <h2>Responsable de Mention</h2>
         <nav>
             <ul>
                 <li><a href="dashboard_chef.php?niveau=Licence I">Licence I</a></li>

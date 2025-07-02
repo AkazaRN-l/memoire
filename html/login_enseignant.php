@@ -3,28 +3,37 @@ session_start();
 require 'config.php';
 
 $error = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = trim($_POST['email']);
-    $matricule = trim($_POST['numero_matricule']);
+    $email = !empty($_POST['email']) ? trim($_POST['email']) : '';
+    $matricule = !empty($_POST['numero_matricule']) ? trim($_POST['numero_matricule']) : '';
+    $motdepasse = !empty($_POST['motdepasse']) ? trim($_POST['motdepasse']) : '';
 
-    $sql = "SELECT * FROM enseignants WHERE email = ? AND numero_matricule = ? LIMIT 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $email, $matricule);
-    
-    if ($stmt->execute()) {
-        $enseignant = $stmt->get_result()->fetch_assoc();
-        if ($enseignant) {
-            $_SESSION['enseignants'] = $enseignant;
-            $_SESSION['user_id'] = $enseignant['id']; 
-            $_SESSION['role'] = 'enseignant';
-            header("Location: dashboard_enseignant.php");
-            exit();
+    if ($email !== '' && $matricule !== '' && $motdepasse !== '') {
+        $sql = "SELECT * FROM enseignants WHERE email = ? AND numero_matricule = ? LIMIT 1";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $email, $matricule);
 
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            if ($result->num_rows === 1) {
+                $enseignant = $result->fetch_assoc();
+
+                if (password_verify($motdepasse, $enseignant['motdepasse'])) {
+                    $_SESSION['enseignants'] = $enseignant;
+                    header("Location: dashboard_enseignant.php");
+                    exit();
+                } else {
+                    $error = "Mot de passe incorrect.";
+                }
+            } else {
+                $error = "Email ou numéro matricule incorrect.";
+            }
         } else {
-            $error = "Identifiants invalides";
+            $error = "Erreur lors de la connexion à la base de données.";
         }
     } else {
-        $error = "Erreur système";
+        $error = "Veuillez remplir tous les champs.";
     }
 }
 ?>
@@ -66,8 +75,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             <div class="input-group">
                 <i class="fas fa-id-badge"></i>
-                <input type="password" name="numero_matricule" placeholder="Numéro matricule" required>
+                <input type="texte" name="numero_matricule" placeholder="Numéro matricule" required>
             </div>
+
+            <div class="input-group">
+                <i class="fas fa-id-badge"></i>
+                <input type="password" name="motdepasse" placeholder="Password" id="password" required>
+            </div>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="show-password" onclick="togglePassword()">
+                <label for="show-password">Afficher le mot de passe</label>
+            </div>
+
             
             <button type="submit" class="btn-login">
                 <span>Se connecter</span>
@@ -75,6 +95,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </button>
         </form>
     </div>
+
+    <script>
+    function togglePassword() {
+        const passwordField = document.getElementById("password");
+        passwordField.type = passwordField.type === "password" ? "text" : "password";
+    }
+    </script>
+
 
     <!-- JavaScript Externe -->
     <script src="../js/login_ensaignant.js"></script>

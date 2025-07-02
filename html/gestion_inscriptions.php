@@ -25,7 +25,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <title>Gestion des Inscriptions</title>
-    <link rel="stylesheet" href="../css/admin_style.css"> <!-- Style pour le chef de mention -->
+    <link rel="stylesheet" href="../css/admin_style.css">
 </head>
 <body>
     <div class="container">

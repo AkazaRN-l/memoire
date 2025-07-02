@@ -28,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($result->num_rows === 1) {
                 $user = $result->fetch_assoc();
 
-                // Vérifier si l'étudiant est validé par le chef de mention
+               
                 if ($user["statut"] !== "validé") {
-                    $error = "❌ Votre compte n'a pas encore été validé par le chef de mention.";
+                    $error = "❌ Votre compte n'a pas encore été validé par le Responsable de mention.";
                 } else {
                     // Vérifier le mot de passe haché
                     if (password_verify($password, $user["mot_de_passe"])) {

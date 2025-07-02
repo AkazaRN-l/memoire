@@ -32,7 +32,7 @@ $annee_actuelle = $conn->query($sql_actuelle)->fetch_assoc()['valeur'];
     <div class="dashboard-container">
     <aside class="sidebar"  id="sidebar">
         <img src="../photo/satellite-dish-310868_1920.png" alt="Logo Chef" style="width: 50px; display: block; margin: 0 auto 10px;">
-        <h2>Chef de Mention</h2>
+        <h2>Responsable de Mention</h2>
         <div class="annee-academique">
             <h3>Année Académique: <?= $annee_academique ?></h3>
             <form method="POST">

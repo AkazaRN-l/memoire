@@ -1,6 +1,10 @@
 <?php
 include 'config.php';
 session_start();
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/autoload.php';
+
 
 // Vérifier si l'utilisateur est bien le chef de mention
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'chef_mention') {
@@ -15,15 +19,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $specialite = $_POST["specialite"];
 
-    $sql = "INSERT INTO enseignants (numero_matricule, nom, prenom, email, specialite) VALUES (?, ?, ?, ?, ?)";
+    // Générer un mot de passe aléatoire
+    $motdepasse = bin2hex(random_bytes(4)); 
+    $motdepasse_hash = password_hash($motdepasse, PASSWORD_DEFAULT); 
+
+    $sql = "INSERT INTO enseignants (numero_matricule, nom, prenom, email, specialite, motdepasse) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $matricule, $nom, $prenom, $email, $specialite);
+    $stmt->bind_param("ssssss", $matricule, $nom, $prenom, $email, $specialite, $motdepasse_hash);
 
     if ($stmt->execute()) {
-        header("Location: gerer_enseignants.php?success=1");
+        // Envoi de l'email avec PHPMailer
+        $mail = new PHPMailer(true);
+        try {
+            $mail->CharSet = 'UTF-8';
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'rahaja.ranjanirina@gmail.com';
+            $mail->Password = 'lmgf mzzx nyut xseq';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
+
+            $mail->setFrom('rahaja.ranjanirina@gmail.com', 'Université de Vakinankaratra');
+            $mail->addAddress($email, $prenom . ' ' . $nom);
+            
+            $mail->isHTML(true);
+            $mail->Subject = 'Vos identifiants pour la plateforme pédagogique';
+            $mail->Body = "
+                <h2>Bonjour $prenom $nom,</h2>
+                <p>Vous avez été enregistré comme enseignant sur la plateforme pédagogique de la mention télécommunication</p>
+                <p><strong>Voici vos identifiants :</strong></p>
+                <ul>
+                    <li>Email: $email</li>
+                    <li>Mot de passe temporaire: $motdepasse</li>
+                    <li>Numéro matricule: $matricule</li>
+                </ul>
+                <p>Nous vous recommandons de changer votre mot de passe après votre première connexion.</p>
+                <p>Cordialement,<br>Chef de mention</p>
+            ";
+
+            $mail->send();
+            $_SESSION['success'] = "✅ Enseignant ajouté avec succès et email envoyé à $email";
+        } catch (Exception $e) {
+            $_SESSION['error'] = "✅ Enseignant ajouté mais l'email n'a pas pu être envoyé. Erreur : " . $mail->ErrorInfo;
+        }
+
+        header("Location: gerer_enseignants.php");
         exit();
     } else {
-        die("❌ Erreur lors de l'ajout.");
+        $_SESSION['error'] = "❌ Erreur lors de l'ajout de l'enseignant";
+        header("Location: gerer_enseignants.php");
+        exit();
     }
 
     $stmt->close();
@@ -49,10 +102,18 @@ $result_enseignants = $conn->query($sql_enseignants);
                 <h2>👨‍🏫 Ajouter un Enseignant</h2>
             </div>
 
-            <?php if (isset($_GET['success'])) : ?>
+            <?php if (isset($_SESSION['success'])) : ?>
                 <div class="success-message">
-                    ✅ Enseignant ajouté avec succès !
+                    <?= $_SESSION['success'] ?>
                 </div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error'])) : ?>
+                <div class="error-message">
+                    <?= $_SESSION['error'] ?>
+                </div>
+                <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
 
             <form class="teacher-form" action="gerer_enseignants.php" method="POST">

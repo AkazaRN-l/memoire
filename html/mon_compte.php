@@ -90,7 +90,7 @@ $user = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Compte - Chef de Mention</title>
+    <title>Mon Compte - Responsable de Mention</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/mon_compte.css">
     <link rel="stylesheet" href="../css/dashboard_chef.css">
@@ -100,7 +100,7 @@ $user = $result->fetch_assoc();
 <aside class="sidebar">
 
 <img src="../photo/Logo_Mention.jpg" alt="Logo Chef" style="width: 50px; display: block; margin: 0 auto 10px;">
-    <h2>Chef de Mention</h2>
+    <h2>Responsable de Mention</h2>
     <nav>
         <ul>
             <li><a href="dashboard_chef.php?niveau=Licence I">Licence I</a></li>

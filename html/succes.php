@@ -16,7 +16,7 @@
     <div class="success-box">
         <i class="fas fa-check-circle"></i>
         <h2>🎉 Félicitations !</h2>
-        <p>Votre inscription a été enregistrée avec succès.<br>Veuillez attendre la validation du chef de mention.<br>Vous recevrez un email dès que votre compte sera activé.</p>
+        <p>Votre inscription a été enregistrée avec succès.<br>Veuillez attendre la validation du Responsable de mention.<br>Vous recevrez un email dès que votre compte sera activé.</p>
         <a href="login_etudiant.php" class="btn">Se connecter</a>
         <p class="redirect-msg">Redirection automatique vers la connexion...</p>
     </div>
